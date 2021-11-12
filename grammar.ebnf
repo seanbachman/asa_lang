@@ -1,0 +1,21 @@
+function_definition = "fn ", identifier, "(", [{expression, [","]}], ")", "{", {statement}, "}";
+program  = function_define | statement | expression
+identifier  =  {ALPHANUMERIC};
+number  =  {"0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"};
+boolean  = "true" | "false";
+string  = '"', {ALPHANUMERIC}, '"';
+function_call  = identifier, "(", [{expression, [","]}], ")";
+parenthetical_expression  = "(", l1, ")";
+l4  = function_call | number | identifier | parenthetical_expression;
+l3_infix  = {[" "]}, "*" | "/", {[" "]}, l4;
+l3  = l4, [{l3_infix}];
+l2_infix  = {[" "]}, "*" | "/", {[" "]}, l3;
+l2  = l3, [{l2_infix}];
+l1_infix  = {[" "]}, "+" | "-", {[" "]}, l2;
+l1  = l2, [{l1_infix}];
+math_expression  = l1;
+expression  = boolean | math_expression | number | function_call | string | identifier;
+statement  = variable_define | function_return;
+function_return  = "return ", expression, ";";
+variable_define  = "let ", identifier, [" "], "=", [" "], expression, ";";
+comment  =  "//", {ALPHANUMERIC}

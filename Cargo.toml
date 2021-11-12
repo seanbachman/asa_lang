@@ -1,0 +1,9 @@
+[package]
+name = "asa_lang"
+version = "1.0.0"
+authors = ["Sean Bachman <seangbachman@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+nom = "5.0.1"
+regex = "1"
