@@ -67,6 +67,17 @@ impl Runtime {
           _ => Err("Cannot do math on String or Bool"),
         }
       },
+      Node::Conditional{name, children} => {
+        let lhs = self.run(&children[0]);
+        let rhs = self.run(&children[1]);
+        match name.as_ref() {
+          //"<=" => Ok(Value::Bool(lhs.unwrap() <= rhs.unwrap())),
+          //">=" => Ok(Value::Bool(lhs.unwrap() >= rhs.unwrap())),
+          "==" => Ok(Value::Bool(lhs.unwrap() == rhs.unwrap())),
+          "!=" => Ok(Value::Bool(lhs.unwrap() != rhs.unwrap())),
+          _ => Err("Undefined operator")
+        }
+      },
       Node::FunctionCall{name, children} => {
         if name == "print" {
           let in_args = if children.len() > 0 {
@@ -81,7 +92,7 @@ impl Runtime {
           };
           let value = self.run(&in_args[0])?;
           match value.borrow() {
-            Value::String(string) => {println!("{:?}", string);}
+            Value::String(string) => {println!("{}", String::from(string));}
             Value::Number(num) => {println!("{:?}", num);}
             Value::Bool(bool) => {println!("{:?}", bool);}
           }
@@ -161,7 +172,8 @@ impl Runtime {
       Node::Statement{children} => {
         match children[0] {
           Node::VariableDefine{..} |
-          Node::FunctionReturn{..} => {
+          Node::FunctionReturn{..} |
+          Node::Conditional {..} => {
             self.run(&children[0])
           },
           _ => Err("Unknown Statement"),
@@ -208,9 +220,6 @@ impl Runtime {
   }
 
 }
-
-
-
 
 //runs a tree
 pub fn run(node: &Node) -> Result<Value, &'static str> {

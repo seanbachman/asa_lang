@@ -15,7 +15,10 @@ fn main() {
       let contents = fs::read_to_string(&*args[1]).expect("Something went wrong reading the file");
       let (_, parsetree) = program(&*contents).unwrap();
       //println!("Parse Tree:  {:?}", parsetree); //optionally print parse tree
-      run(&parsetree);
+      match run(&parsetree) {
+        Err(e) => println!("{:?}", e),
+        _ => ()
+      }
     }
     else {
       println!("Error: files must end in .asa");

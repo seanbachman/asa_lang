@@ -28,6 +28,7 @@ pub enum Node {
   Bool { value: bool },
   Identifier { value: String },
   String { value: String },
+  Conditional {name: String, children: Vec<Node>},
   //TODO move print to standard library
   //TODO make hello world example with functions
   //TODO alter existing variables
@@ -170,6 +171,13 @@ pub fn expression(input: &str) -> IResult<&str, Node> {
   Ok((input, Node::Expression{ children: vec![expression]}))
 }
 
+pub fn conditional(input: &str) -> IResult<&str, Node> {
+  let (input, lhs) = expression(input)?;
+  let (input, op) = alt((tag("=="), tag("!=")))(input)?;
+  let (input, rhs) = expression(input)?;
+  Ok((input, Node::Conditional{name: op.to_string(), children: vec![lhs, rhs]}))
+}
+
 //In the form
 //let x = expression;
 pub fn variable_define(input: &str) -> IResult<&str, Node> {
@@ -193,7 +201,7 @@ pub fn function_return(input: &str) -> IResult<&str, Node> {
 }
 
 pub fn statement(input: &str) -> IResult<&str, Node> {
-  let (input, statement) = alt(( variable_define, function_return))(input)?;
+  let (input, statement) = alt((variable_define, function_return, conditional))(input)?;
   let (input, _) = many0(alt((tag(" "), tag("\t"), tag("\n"))))(input)?; //whitespace
   Ok((input, Node::Statement{ children: vec![statement]}))
 }

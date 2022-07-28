@@ -1,1 +1,1 @@
-/home/seangbachman/cse262/homework-7b/target/debug/libasa_lang.rlib: /home/seangbachman/cse262/homework-7b/src/lib.rs /home/seangbachman/cse262/homework-7b/src/parser.rs /home/seangbachman/cse262/homework-7b/src/runtime.rs
+/home/sean/asa_lang/target/debug/libasa_lang.rlib: /home/sean/asa_lang/src/lib.rs /home/sean/asa_lang/src/parser.rs /home/sean/asa_lang/src/runtime.rs
