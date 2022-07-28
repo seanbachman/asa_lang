@@ -69,3 +69,4 @@ fn bar(a) {
 fn main() {
   return foo(1,2,3);  
 }"#, Ok(Value::Number(6)));
+test!(function_with_if_stament, r#"fn main() {return foo();} fn foo(){if (12==1){return 5;}if (1==1){return 10;}}"#, Ok(Value::Number(10)));

@@ -18,6 +18,7 @@ pub enum Node {
   Statement { children: Vec<Node> },
   FunctionReturn { children: Vec<Node> },
   FunctionDefine { children: Vec<Node> },
+  IfStatement { children: Vec<Node> },
   FunctionArguments { children: Vec<Node> },
   FunctionStatements { children: Vec<Node> },
   Expression { children: Vec<Node> },
@@ -173,9 +174,29 @@ pub fn expression(input: &str) -> IResult<&str, Node> {
 
 pub fn conditional(input: &str) -> IResult<&str, Node> {
   let (input, lhs) = expression(input)?;
+  let (input, _) = many0(tag(" "))(input)?; //whitespace
   let (input, op) = alt((tag("=="), tag("!=")))(input)?;
+  let (input, _) = many0(tag(" "))(input)?; //whitespace
   let (input, rhs) = expression(input)?;
   Ok((input, Node::Conditional{name: op.to_string(), children: vec![lhs, rhs]}))
+}
+
+pub fn if_statement(input: &str) -> IResult<&str, Node> {
+  let (input, _) = tag("if")(input)?;
+  let (input, _) = many0(tag(" "))(input)?; //whitespace
+  let (input, _) = tag("(")(input)?;
+  let (input, condition) = conditional(input)?;
+  let (input, _) = tag(")")(input)?;
+  let (input, _) = many0(alt((tag(" "), tag("\t"), tag("\n"))))(input)?; //whitespace
+  let (input, _) = tag("{")(input)?;
+  let (input, _) = many0(alt((tag(" "), tag("\t"), tag("\n"))))(input)?; //whitespace
+  let (input, mut statements) = many1(statement)(input)?;
+  let (input, _) = many0(alt((tag(" "), tag("\t"), tag("\n"))))(input)?; //whitespace
+  let (input, _) = tag("}")(input)?;
+
+  let mut ifstatement = vec![condition];
+  ifstatement.append(&mut statements);
+  Ok((input, Node::IfStatement { children: ifstatement}))
 }
 
 //In the form
@@ -201,7 +222,7 @@ pub fn function_return(input: &str) -> IResult<&str, Node> {
 }
 
 pub fn statement(input: &str) -> IResult<&str, Node> {
-  let (input, statement) = alt((variable_define, function_return, conditional))(input)?;
+  let (input, statement) = alt((variable_define, function_call, function_return, if_statement))(input)?;
   let (input, _) = many0(alt((tag(" "), tag("\t"), tag("\n"))))(input)?; //whitespace
   Ok((input, Node::Statement{ children: vec![statement]}))
 }

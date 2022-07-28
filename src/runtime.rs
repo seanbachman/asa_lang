@@ -79,6 +79,7 @@ impl Runtime {
         }
       },
       Node::FunctionCall{name, children} => {
+        println!("[DEBUG] Function Call Children: {:?}", children);
         if name == "print" {
           let in_args = if children.len() > 0 {
             match &children[0] {
@@ -141,12 +142,38 @@ impl Runtime {
               self.stack.push(new_frame); //put result on stack
               for n in statements.clone() {
                 result = self.run(&n);
+                println!("[DEBUG] Node: {:?}", n);
+                // look for function return, this means to break out of the loop
+                match n {
+                  Node::Statement { children } => {
+                    match &children[0] {
+                      Node::FunctionReturn {..} => break,
+                      _ => ()
+                    }
+                  },
+                  _ => ()
+                }
               }
               self.stack.pop();
             },
             None => (),
           };
           result
+        }
+      },
+      Node::IfStatement {children} => {
+        let condition = self.run(&children[0]);
+        let mut result: Result<Value, &'static str> = Err("Empty if statement");
+        match condition {
+          Ok(Value::Bool(bool)) => {
+            if bool {
+              for n in children.clone() {
+                result = self.run(&n);
+              }
+            }
+            result
+          },
+          _ => Err("Condition did not return boolean")
         }
       },
       Node::FunctionDefine{children} => {
@@ -173,7 +200,8 @@ impl Runtime {
         match children[0] {
           Node::VariableDefine{..} |
           Node::FunctionReturn{..} |
-          Node::Conditional {..} => {
+          Node::IfStatement {..} | 
+          Node::FunctionCall {..} => {
             self.run(&children[0])
           },
           _ => Err("Unknown Statement"),
@@ -226,5 +254,6 @@ pub fn run(node: &Node) -> Result<Value, &'static str> {
   let mut runtime = Runtime::new();
   runtime.run(node)?;
   let start_main = Node::FunctionCall{name: "main".to_string(), children: vec![]};
+  println!("[DEBUG] Root children: {:?}", node);
   runtime.run(&start_main)
 }

@@ -1,0 +1,29 @@
+fn main() {
+    print(fib(1));
+}
+
+fn fib(number) {
+    if (number == 1) {
+        return number;
+    }
+    if (number == 0) {
+        return number;
+    }
+    if (number != 1) {
+        return(fib(number - 1) + fib(number - 2));
+    }
+}
+
+
+fn foo(number) {
+    if (number == 5) {
+        return 5;
+    }
+    if (number != 5) {
+        return 6;
+    }
+}
+
+fn main() {
+    print(foo(5))
+}
