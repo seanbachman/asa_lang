@@ -85,7 +85,7 @@ fn main() {
 fn foo(a, b, c) {
   return 0;
 }
-
+```
 
 ## Tree walk interpreters
 The output of my parser is a tree of Nodes. You can find a list of Node types in `src/parser.rs` The tree should contains single root "Program" node. The rest of the tree is determined by what is entered in the .asa file. If you want to learn more, I recommend checking out this awesome book, [crafting interpreters](https://craftinginterpreters.com/).
