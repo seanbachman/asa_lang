@@ -14,7 +14,7 @@ fn main() {
     if re.is_match(&*args[1]) { //&* converts to &str from String
       let contents = fs::read_to_string(&*args[1]).expect("Something went wrong reading the file");
       let (_, parsetree) = program(&*contents).unwrap();
-      //println!("Parse Tree:  {:?}", parsetree); //optionally print parse tree
+      //println!("[DEBUG] Parse Tree: {:?}", parsetree); //optionally print parse tree
       match run(&parsetree) {
         Err(e) => println!("{:?}", e),
         _ => ()

@@ -1,29 +1,21 @@
-fn main() {
-    print(fib(1));
-}
-
 fn fib(number) {
-    if (number == 1) {
-        return number;
-    }
+    
     if (number == 0) {
-        return number;
+        let result = 0;
     }
+    if (number == 1) {
+        let result = 1;
+    }
+
     if (number != 1) {
-        return(fib(number - 1) + fib(number - 2));
+        if (number != 0) {
+            let result = fib(number - 1) + fib(number - 2);
+        }
     }
-}
 
-
-fn foo(number) {
-    if (number == 5) {
-        return 5;
-    }
-    if (number != 5) {
-        return 6;
-    }
+    return result;
 }
 
 fn main() {
-    print(foo(5))
+    print(fib(9))
 }
