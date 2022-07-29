@@ -1,0 +1,8 @@
+fn main() {
+    print("Hello World 2 !")
+    prt()
+}
+
+fn prt() {
+    print("Hello World 3 !")
+}

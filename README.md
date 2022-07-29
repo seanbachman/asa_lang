@@ -46,6 +46,46 @@ fn main() {
 
 So far the language supports writing functions, calling functions, math, and return values. Strings and Booleans are also data types in the language, but the runtime doesn't do anything with them. See `tests/parser.rs` for more examples of valid and invalid asa programs.
 
+### Quirks of Asa
+Asa contains a few "odd" features that may introduce some difficulties when writing programs. These may be fixed in the future but I will just list them here for now
+- Function arguments and parameters cannot contain spaces. Write like this:
+```
+fn main() {
+  foo(a,b,c)
+}
+fn foo(a,b,c) {
+  return 0;
+}
+```
+Not like this:
+```
+fn main() {
+  foo(a, b, c)
+}
+fn foo(a, b, c) {
+  return 0;
+}
+```
+- Lines that only contain a function call do not end in semicolons. Write like this:
+```
+fn main() {
+  foo(a,b,c)
+  print(foo(a,b,c))
+}
+fn foo(a,b,c) {
+  return 0;
+}
+```
+Not like this:
+```
+fn main() {
+  foo(a, b, c);
+  print(foo(a,b,c));
+}
+fn foo(a, b, c) {
+  return 0;
+}
+
 
 ## Tree walk interpreters
 The output of my parser is a tree of Nodes. You can find a list of Node types in `src/parser.rs` The tree should contains single root "Program" node. The rest of the tree is determined by what is entered in the .asa file. If you want to learn more, I recommend checking out this awesome book, [crafting interpreters](https://craftinginterpreters.com/).
