@@ -1,0 +1,13 @@
+fn main() {
+    print(factorial(5))
+}
+
+fn factorial(number) {
+    if (number == 1) {
+        let result = 1;
+    }
+    if (number != 1) {
+        let result = number * factorial(number - 1);
+    }
+    return result;
+}

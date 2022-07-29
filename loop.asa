@@ -1,0 +1,12 @@
+fn main() {
+    loop(0,10,2)
+}
+
+fn loop(index,end,increment) {
+    if (index != end) {
+        print("index is: ")
+        print(index)
+        loop(index + increment, end, increment)
+    }
+    return 0;
+}
