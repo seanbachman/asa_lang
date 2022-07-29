@@ -86,6 +86,21 @@ fn foo(a, b, c) {
   return 0;
 }
 ```
+- You can modify the value of variables, but you have to do it by declaring a variable with the same name. Write like this: 
+```
+fn main() {
+  let x = 0;
+  let x = x + 1;
+}
+```
+Not like this:
+```
+fn main() {
+  let x = 0;
+  x = x + 1;
+}
+```
+
 
 ## Tree walk interpreters
 The output of my parser is a tree of Nodes. You can find a list of Node types in `src/parser.rs` The tree should contains single root "Program" node. The rest of the tree is determined by what is entered in the .asa file. If you want to learn more, I recommend checking out this awesome book, [crafting interpreters](https://craftinginterpreters.com/).
